@@ -1,0 +1,1 @@
+This is code for an rgb blink program, made for the fomu hacker board. Code is pasted together from the blink example and verilog i already had written for the icebreaker.
