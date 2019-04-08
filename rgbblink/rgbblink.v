@@ -30,7 +30,8 @@ module rgbblink (
     reg [23:0] slowdowncounter;
     reg [7:0] pwmcounter;
     reg [7:0] pulse;
-    reg [2:0] RGBcounter;
+    reg [2:0] RGBcounter=1;
+    reg direction;
 
     wire enable_blue;
     wire enable_green;
@@ -39,13 +40,22 @@ module rgbblink (
     always @(posedge clk) begin
 		slowdowncounter <= slowdowncounter + 1;
 		pwmcounter <= pwmcounter + 1;
-		if (slowdowncounter == 600000) begin
+		if (slowdowncounter == 300000) begin
 			slowdowncounter <= 0;
-			pulse <= pulse + 1;
+            if (direction == 0) begin
+			    pulse <= pulse + 1;
+            end else begin
+                pulse <= pulse - 1;
+            end
 		end
-		if (pulse == 0) begin
+		if (pulse == 0 && direction == 1) begin
 			RGBcounter <= RGBcounter + 1;
+            direction <= 0;
 		end
+
+        if(pulse == 255) begin
+            direction <= 1;
+        end
 
 		if (pwmcounter<pulse) begin
 			enable_red <= RGBcounter[0];
